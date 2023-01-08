@@ -1,0 +1,11 @@
+{
+  "name": "types",
+  "version": "0.0.0",
+  "private": true,
+  "types": "index.d.ts",
+  "lint-staged": {
+    "./**/*.{ts,js,tsx,jsx,vue,css,scss}": [
+      "prettier --write"
+    ]
+  }
+}

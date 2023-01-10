@@ -1,11 +1,11 @@
-import { env } from "config";
+import GoogleMap from "@/components/GoogleMap";
 
 function App() {
-  console.log(env.API_URL);
+  console.log("App");
 
   return (
     <div className="App">
-      <h1>Web is online on port {env.WEB_PORT}</h1>
+      <GoogleMap />
     </div>
   );
 }

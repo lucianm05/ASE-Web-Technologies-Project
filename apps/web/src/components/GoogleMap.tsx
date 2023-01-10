@@ -33,7 +33,7 @@ const GoogleMap = () => {
       <GoogleMapReact
         center={BUCHAREST_COORDS}
         zoom={12}
-        bootstrapURLKeys={{ key: "AIzaSyC2AE8Jgsf4KWQAQia9O0pZdKpVY7Zy29M" }}
+        bootstrapURLKeys={{ key: import.meta.env.VITE_GOOGLE_API_KEY }}
         yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={({ map }) => {
           setMap(map);

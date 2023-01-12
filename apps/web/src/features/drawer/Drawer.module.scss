@@ -1,0 +1,9 @@
+.drawer {
+  transition: transform 0.25s ease-in-out;
+  transform: translateX(320px);
+  will-change: transform;
+
+  &__open {
+    transform: translateX(0);
+  }
+}

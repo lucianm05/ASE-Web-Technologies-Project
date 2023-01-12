@@ -1,11 +1,12 @@
-import GoogleMap from "@/components/GoogleMap";
+import Drawer from "@/features/drawer/Drawer";
+import Map from "@/features/map/Map";
 
 function App() {
-  console.log("App");
-
   return (
     <div className="App">
-      <GoogleMap />
+      <Drawer />
+
+      <Map />
     </div>
   );
 }

@@ -14,6 +14,15 @@ const dict = {
     street: "Street",
     success: "Success",
     close: "Close",
+    delete: "Delete",
+    edit: "Edit",
+    close_modal: "Close modal",
+    are_you_sure: "Are you sure?",
+    available_spaces: "available spaces",
+    occupied_spaces: "occupied spaces",
+    spaces: "spaces",
+    reserve: "Reserve",
+    cancel: "Cancel",
   },
 };
 

@@ -10,6 +10,7 @@ export interface ParkingLotEntity extends Omit<ParkingLotDTO, "location"> {
 const ParkingLot = sequelize.define<Model<ParkingLotEntity>>("parkinglot", {
   id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
   capacity: { type: DataTypes.INTEGER, defaultValue: 1 },
+  occupiedSpaces: { type: DataTypes.INTEGER, defaultValue: 0 },
   fee: { type: DataTypes.INTEGER, defaultValue: 0 },
   name: { type: DataTypes.STRING, defaultValue: "" },
   locationId: { type: DataTypes.INTEGER, defaultValue: null },

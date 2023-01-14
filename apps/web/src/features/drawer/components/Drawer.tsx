@@ -13,7 +13,7 @@ const Drawer = () => {
 
   return (
     <aside
-      className={`w-full max-w-[320px] fixed top-0 right-0 h-full bg-slate-50 z-10 p-4 drop-shadow-xl ${
+      className={`w-full max-w-[320px] fixed top-0 right-0 h-full bg-slate-50 z-10 p-4 drop-shadow-xl flex flex-col ${
         classes.drawer
       } ${isOpen && classes["drawer__open"]}`}
     >
@@ -25,12 +25,13 @@ const Drawer = () => {
           onClick={() => setIsOpen(false)}
           aria-label={dict.en.close_drawer}
           title={dict.en.close_drawer}
+          theme="none"
         >
           <IconClose width={32} height={32} />
         </Button>
       </header>
 
-      {body && <main className="mt-6">{body}</main>}
+      {body && <main className="py-6 flex-1">{body}</main>}
 
       {footer && <footer>{footer}</footer>}
     </aside>

@@ -1,14 +1,14 @@
-import { Alert } from "@/types";
+import { Alert, VoidFn } from "@/types";
 import { create } from "zustand";
 
 let id = 0;
 
 interface AlertStore {
   alerts: Alert[];
-  dispatchAlert: (payload: Omit<Alert, "id">) => void;
-  closeAlert: (id: number) => void;
-  success: (message: string) => void;
-  error: (message: string) => void;
+  dispatchAlert: VoidFn<Omit<Alert, "id">>;
+  closeAlert: VoidFn<number>;
+  success: VoidFn<string>;
+  error: VoidFn<string>;
 }
 
 const useAlert = create<AlertStore>((set, get) => ({
@@ -16,7 +16,6 @@ const useAlert = create<AlertStore>((set, get) => ({
   dispatchAlert: (alert) =>
     set((state) => {
       id++;
-      console.log(id);
       return { alerts: [...state.alerts, { ...alert, id }] };
     }),
   closeAlert: (id) =>

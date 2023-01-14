@@ -21,7 +21,7 @@ const Alert = ({ id, type, message }: Alert) => {
 
   return (
     <div
-      className={`w-max absolute left-1/2 translate-x-1/2 -translate-y-4 top-4 px-4 py-2 rounded-full text-lg pointer-events-auto shadow-md flex items-center space-x-2 text-slate-50 ${
+      className={`w-max absolute left-1/2 -translate-x-1/2 top-4 px-4 py-2 rounded-full text-lg pointer-events-auto shadow-md flex items-center space-x-2 text-slate-50 ${
         classes.alert
       } ${type === "success" ? "bg-green-500" : "bg-red-500"}`}
     >
@@ -34,6 +34,7 @@ const Alert = ({ id, type, message }: Alert) => {
         onClick={() => {
           closeAlert(id);
         }}
+        theme="none"
       >
         <IconClose width={24} height={24} />
       </Button>

@@ -1,5 +1,5 @@
-import Alert from "@/features/alert/Alert";
 import useAlert from "@/features/alert/alert.store";
+import Alert from "@/features/alert/components/Alert";
 
 const Alerts = () => {
   const { alerts } = useAlert();

@@ -1,26 +1,25 @@
 import dict from "@/constants/dict";
 import queryKeys from "@/constants/query-keys";
 import useAlert from "@/features/alert/alert.store";
+import { MessageResponse } from "@/types";
 import { fetcher, FetchError } from "@/utils/fetcher";
 import { useQueryClient } from "react-query";
-import { ParkingLotPayload } from "types";
 
-export const createParkingLot = async (payload: ParkingLotPayload) => {
-  const res = await fetcher<{ id: number }>("/parking-lot", {
-    method: "POST",
-    body: JSON.stringify(payload),
+export const deleteParkingLot = async (id: number) => {
+  const res = await fetcher<MessageResponse>(`/parking-lot/${id}`, {
+    method: "DELETE",
   });
   return res;
 };
 
-export const useCreateParkingLot = () => {
+export const useDeleteParkingLot = () => {
   const { success, error } = useAlert();
   const queryClient = useQueryClient();
 
-  const createParkingLotHandler = async (payload: ParkingLotPayload) => {
+  const deleteParkingLotHandler = async (id: number) => {
     try {
-      const res = await createParkingLot(payload);
-      await queryClient.refetchQueries({ queryKey: queryKeys.parkingLots });
+      const res = await deleteParkingLot(id);
+      queryClient.refetchQueries({ queryKey: queryKeys.parkingLots });
       success(dict.en.success);
 
       return res;
@@ -33,5 +32,5 @@ export const useCreateParkingLot = () => {
     }
   };
 
-  return createParkingLotHandler;
+  return deleteParkingLotHandler;
 };

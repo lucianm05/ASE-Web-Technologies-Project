@@ -12,6 +12,8 @@ const dict = {
     country: "Country",
     city: "City",
     street: "Street",
+    success: "Success",
+    close: "Close",
   },
 };
 

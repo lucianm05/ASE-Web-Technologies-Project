@@ -1,15 +1,61 @@
 import ParkingLotForm from "@/components/forms/ParkingLotForm";
 import { BUCHAREST_COORDS } from "@/constants";
 import { useDrawer } from "@/features/drawer/drawer.store";
+import { getParkingLots } from "@/features/map/api/getParkingLots";
 import GoogleMapReact from "google-map-react";
-import { useCallback, useState } from "react";
-import { ICoords, ILocation } from "types";
+import { useCallback, useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import { LocationPayload } from "types";
 
 const Map = () => {
   const { setIsOpen, setConfig } = useDrawer();
 
   const [map, setMap] = useState<google.maps.Map>();
   const [marker, setMarker] = useState<google.maps.Marker>();
+  const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+
+  const { data: parkingLots } = useQuery("parking-lots", getParkingLots);
+
+  useEffect(() => {
+    if (!parkingLots || !map || typeof google === "undefined") return;
+
+    const newMarkers: typeof markers = [];
+
+    parkingLots.forEach((parkingLot) => {
+      const { location } = parkingLot;
+
+      if (!location?.lat || !location?.lng) return;
+
+      const newMarker = new google.maps.Marker({
+        map,
+        position: new google.maps.LatLng({
+          lat: location?.lat,
+          lng: location.lng,
+        }),
+        clickable: true,
+      });
+
+      newMarker.addListener("click", (event: { domEvent: MouseEvent }) => {
+        event.domEvent.stopImmediatePropagation();
+        console.log("parking lot", parkingLot.id);
+
+        if (!location?.lat || !location?.lng) return;
+
+        map.setCenter({
+          lat: location.lat,
+          lng: location.lng,
+        });
+      });
+
+      newMarkers.push(newMarker);
+    });
+
+    setMarkers(newMarkers);
+
+    return () => {
+      markers.forEach((m) => m.unbindAll());
+    };
+  }, [map, parkingLots]);
 
   const getAddressComponent = useCallback(
     (
@@ -29,16 +75,15 @@ const Map = () => {
 
   const onClick = useCallback(
     async ({ lat, lng }: GoogleMapReact.ClickEventValue) => {
+      marker?.setMap(null);
+
       if (!map) return;
 
-      const coords: ICoords = { lat, lng };
       const currentZoom = map.getZoom();
-
-      if (currentZoom && currentZoom < 15) {
-        map.setZoom(15);
-      }
-
-      marker?.setMap(null);
+      map.moveCamera({
+        center: { lat, lng },
+        zoom: currentZoom && currentZoom < 15 ? 15 : currentZoom,
+      });
 
       setMarker(
         new google.maps.Marker({
@@ -47,8 +92,9 @@ const Map = () => {
         })
       );
 
-      let location: ILocation = {
-        coords,
+      let location: LocationPayload = {
+        lat,
+        lng,
       };
 
       try {
@@ -61,8 +107,6 @@ const Map = () => {
         const [result] = results;
 
         const { address_components } = result;
-
-        console.log(address_components);
 
         const street = getAddressComponent(address_components, [
           "route",
@@ -81,8 +125,6 @@ const Map = () => {
       } catch (err) {
         console.error(err);
       }
-
-      console.log(location);
 
       setConfig({
         body: <ParkingLotForm location={location} />,
@@ -103,6 +145,10 @@ const Map = () => {
           setMap(map);
         }}
         onClick={onClick}
+        onChildClick={(hoverKey, childProps) => {
+          console.log("onChildClick");
+          console.log(hoverKey, childProps);
+        }}
       />
     </div>
   );

@@ -1,0 +1,15 @@
+.alert {
+  animation: enter 0.5s ease-in-out;
+  top: 5%;
+  will-change: top;
+}
+
+@keyframes enter {
+  from {
+    top: -100%;
+  }
+
+  to {
+    top: 5%;
+  }
+}

@@ -1,5 +1,5 @@
-#Parkings areas management
+# Parkings areas management
 
 To start the project:
-yarn install
-yarn dev
+- yarn install
+- yarn dev

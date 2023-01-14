@@ -1,25 +1,24 @@
 import dict from "@/constants/dict";
 import queryKeys from "@/constants/query-keys";
 import useAlert from "@/features/alert/alert.store";
+import { MessageResponse } from "@/types";
 import { fetcher, FetchError } from "@/utils/fetcher";
 import { useQueryClient } from "react-query";
-import { ParkingLotPayload } from "types";
 
-export const createParkingLot = async (payload: ParkingLotPayload) => {
-  const res = await fetcher<{ id: number }>("/parking-lot", {
-    method: "POST",
-    body: JSON.stringify(payload),
+export const reserveParkingLot = async (id: number) => {
+  const res = await fetcher<MessageResponse>(`/parking-lot/${id}`, {
+    method: "PATCH",
   });
   return res;
 };
 
-export const useCreateParkingLot = () => {
+export const useReserverParkingLot = () => {
   const { success, error } = useAlert();
   const queryClient = useQueryClient();
 
-  const createParkingLotHandler = async (payload: ParkingLotPayload) => {
+  const reserveParkingLotHandler = async (id: number) => {
     try {
-      const res = await createParkingLot(payload);
+      const res = await reserveParkingLot(id);
       await queryClient.refetchQueries({ queryKey: queryKeys.parkingLots });
       success(dict.en.success);
 
@@ -33,5 +32,5 @@ export const useCreateParkingLot = () => {
     }
   };
 
-  return createParkingLotHandler;
+  return reserveParkingLotHandler;
 };

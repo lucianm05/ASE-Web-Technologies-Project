@@ -1,2 +1,4 @@
-export { IParkingLot } from "./IParkingLot";
-export { ILocation, ICoords } from "./ILocation";
+export * from "./BaseEntity";
+export * from "./generics";
+export * from "./Location";
+export * from "./ParkingLot";

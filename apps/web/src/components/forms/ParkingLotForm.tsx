@@ -2,36 +2,47 @@ import Button from "@/components/Button";
 import Fieldset from "@/components/Fieldset";
 import Input from "@/components/Input";
 import dict from "@/constants/dict";
+import { useDrawer } from "@/features/drawer/drawer.store";
+import { useCreateParkingLot } from "@/features/map/api/createParkingLot";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { ILocation, IParkingLot } from "types";
+import { LocationPayload, ParkingLotPayload } from "types";
 
 interface Props {
-  location?: ILocation;
+  location?: LocationPayload;
 }
 
 const ParkingLotForm = ({ location }: Props) => {
-  const { register, handleSubmit, setValue } = useForm<IParkingLot>({
-    defaultValues: {
-      name: "",
-      capacity: 0,
-      fee: 0,
-      location: {
-        street: location?.street,
-        city: location?.city,
-        coords: location?.coords,
-        country: location?.country,
+  const { register, handleSubmit, setValue, reset } =
+    useForm<ParkingLotPayload>({
+      defaultValues: {
+        name: "",
+        capacity: 0,
+        fee: 0,
+        location: {
+          city: location?.city,
+          country: location?.country,
+          lat: location?.lat,
+          lng: location?.lng,
+          street: location?.street,
+        },
       },
-    },
-  });
+    });
 
-  const onSubmit = useCallback((data: IParkingLot) => {
-    console.log("saving parking lot...");
-    console.log(data);
+  const { setIsOpen } = useDrawer();
+  const createParkingLotHandler = useCreateParkingLot();
+
+  const onSubmit = useCallback(async (payload: ParkingLotPayload) => {
+    const res = await createParkingLotHandler(payload);
+
+    if (!res) return;
+
+    setIsOpen(false);
+    reset();
   }, []);
 
   useEffect(() => {
-    if (!location || !(location satisfies ILocation)) return;
+    if (!location) return;
 
     setValue("location", location);
   }, [location]);
@@ -98,13 +109,13 @@ const ParkingLotForm = ({ location }: Props) => {
         <Fieldset label={dict.en.fee}>
           <Input
             type="text"
-            min={1}
+            min={0}
             placeholder={dict.en.parking_lot_hourly_fee}
             required
             pattern="^\d*\.?\d+$"
             {...register("fee", {
               required: true,
-              min: 1,
+              min: 0,
               pattern: /^\d*\.?\d+$/,
               setValueAs: (value) => value * 100,
             })}

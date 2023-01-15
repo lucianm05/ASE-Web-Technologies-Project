@@ -2,6 +2,7 @@ import Button from "@/components/Button";
 import { BUCHAREST_COORDS } from "@/constants";
 import dict from "@/constants/dict";
 import queryKeys from "@/constants/query-keys";
+import useAlert from "@/features/alert/alert.store";
 import { useDrawer } from "@/features/drawer/drawer.store";
 import { getParkingLots } from "@/features/map/api/getParkingLots";
 import { useReserverParkingLot } from "@/features/map/api/reserveParkingLot";
@@ -13,6 +14,7 @@ import { LocationPayload, ParkingLotDTO } from "types";
 
 const Map = () => {
   const { setIsOpen, setConfig } = useDrawer();
+  const { error } = useAlert();
 
   const [map, setMap] = useState<google.maps.Map>();
   const [marker, setMarker] = useState<google.maps.Marker>();
@@ -102,8 +104,12 @@ const Map = () => {
         )?.long_name;
 
         location = { ...location, street, city, country };
-      } catch (err) {
+      } catch (err: unknown) {
         console.error(err);
+
+        if (!(err instanceof Error)) return;
+
+        error(err.message);
       }
 
       setConfig({

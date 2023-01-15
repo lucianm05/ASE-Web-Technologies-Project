@@ -23,6 +23,7 @@ const dict = {
     spaces: "spaces",
     reserve: "Reserve",
     cancel: "Cancel",
+    missing_or_invalid_values: "Missing or invalid values",
   },
 };
 

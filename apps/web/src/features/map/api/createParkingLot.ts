@@ -29,6 +29,11 @@ export const useCreateParkingLot = () => {
 
       if (!(err instanceof FetchError)) return;
 
+      if (err.response.status === 400) {
+        error(dict.en.missing_or_invalid_values);
+        return;
+      }
+
       error(err.data.message);
     }
   };
